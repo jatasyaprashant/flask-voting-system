@@ -5,3 +5,4 @@ instance/
 voting.db
 .env
 uploads/
+paillier_keys.json
