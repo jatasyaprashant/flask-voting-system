@@ -1,0 +1,561 @@
+/* ==================== RESET & GLOBAL STYLES ==================== */
+* {
+    box-sizing: border-box;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    overflow-x: hidden;
+    height: 100%;
+}
+
+.background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 1;
+    z-index: -1;
+}
+
+/* ==================== LAYOUT STRUCTURE ==================== */
+body {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ==================== SIDEBAR STYLES ==================== */
+.sidebar {
+    width: 280px;
+    min-height: 100vh;
+    background-color: #000000;
+    color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    position: fixed;
+    overflow-y: auto;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.sidebar .image {
+    width: 100px;
+    height: 100px;
+    background-color: white;
+    background-image: url(user.png);
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin: 0 auto 20px;
+    display: block;
+}
+
+.sidebar h2 {
+    margin: 20px 0;
+    color: #00a6ff;
+    font-size: 18px;
+    text-align: center;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.sidebar li {
+    margin-bottom: 12px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #fff;
+    display: block;
+    padding: 10px 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.sidebar a:hover {
+    background-color: #00a6ff;
+    color: #000;
+}
+
+/* ==================== MAIN CONTENT AREA ==================== */
+body::before {
+    content: '';
+    width: 280px;
+    min-height: 100vh;
+}
+
+/* ==================== CANDIDATE CARDS ==================== */
+.candidate-image {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.candidates-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 20px;
+    margin-left: 280px;
+    width: calc(100% - 280px);
+    background-color: transparent;
+}
+
+.candidate-card {
+    border: 2px solid #000000;
+    padding: 25px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.candidate-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+}
+
+.candidate-name {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #007BFF;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ==================== VOTE BUTTON ==================== */
+.vote-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 15px;
+    color: white;
+    background-color: #007BFF;
+    text-decoration: none;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-width: 100px;
+}
+
+.vote-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.vote-btn:active {
+    transform: translateY(0);
+}
+
+.no-hover:hover {
+    background-color: inherit;
+}
+
+/* ==================== CONTENT SECTIONS ==================== */
+.start-vote,
+.result,
+.analytics {
+    margin-left: 280px;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    max-width: calc(100% - 320px);
+    min-width: 300px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 30px;
+    overflow-x: auto;
+}
+
+.start-vote::-webkit-scrollbar,
+.result::-webkit-scrollbar,
+.analytics::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.start-vote::-webkit-scrollbar-track,
+.result::-webkit-scrollbar-track,
+.analytics::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.start-vote::-webkit-scrollbar-thumb,
+.result::-webkit-scrollbar-thumb,
+.analytics::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.start-vote::-webkit-scrollbar-thumb:hover,
+.result::-webkit-scrollbar-thumb:hover,
+.analytics::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Firefox scrollbar */
+.start-vote,
+.result,
+.analytics {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+}
+
+/* ==================== TABLES ==================== */
+table.list {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+}
+
+table.list thead {
+    background-color: #007BFF;
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+table.list th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border: 1px solid #007BFF;
+}
+
+table.list td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+table.list tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table.list tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+/* ==================== ANALYTICS STYLES ==================== */
+.analytics {
+    min-height: 300px;
+}
+
+.analytics h2 {
+    font-size: 24px;
+    text-align: center;
+    color: #007BFF;
+    margin-top: 0;
+}
+
+.analytics-container {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.div1,
+.div2 {
+    width: 200px;
+    height: 150px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+.div1 {
+    background: linear-gradient(135deg, #ff9a56, #ffa500);
+}
+
+.div2 {
+    background: linear-gradient(135deg, #22ff00, #1abc9c);
+}
+
+.div1:hover,
+.div2:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.div1 h3,
+.div2 h3 {
+    margin: 0;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+/* ==================== THANK YOU MESSAGE ==================== */
+.thankyou {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 40px;
+    color: #000;
+    text-align: center;
+    margin-top: 100px;
+    margin-left: 280px;
+    overflow: hidden;
+}
+
+/* ==================== RESPONSIVE MEDIA QUERIES ==================== */
+
+/* Tablet: 768px to 1023px */
+@media (max-width: 1023px) {
+    .sidebar {
+        width: 250px;
+    }
+
+    body::before {
+        width: 250px;
+    }
+
+    .candidates-container,
+    .start-vote,
+    .result,
+    .analytics,
+    .thankyou {
+        margin-left: 250px;
+        max-width: calc(100% - 290px);
+        width: calc(100% - 250px);
+    }
+
+    .div1,
+    .div2 {
+        width: 160px;
+        height: 120px;
+    }
+
+    .candidate-card {
+        padding: 20px;
+    }
+
+    .candidate-name {
+        font-size: 18px;
+    }
+
+    table.list {
+        font-size: 13px;
+    }
+
+    table.list th,
+    table.list td {
+        padding: 8px;
+    }
+}
+
+/* Mobile: Below 768px */
+@media (max-width: 767px) {
+    body {
+        flex-direction: column;
+    }
+
+    /* Hide sidebar, toggle with JS */
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 250px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 2000;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    body::before {
+        display: none;
+    }
+
+    .candidates-container,
+    .start-vote,
+    .result,
+    .analytics,
+    .thankyou {
+        margin-left: 0;
+        width: 100%;
+        max-width: 100%;
+        margin-right: 0;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .candidates-container {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+    .candidate-card {
+        padding: 15px;
+    }
+
+    .candidate-name {
+        font-size: 16px;
+    }
+
+    .candidate-image {
+        width: 90px;
+        height: 90px;
+    }
+
+    .vote-btn {
+        width: 100%;
+        min-width: auto;
+    }
+
+    table.list {
+        font-size: 12px;
+    }
+
+    table.list th,
+    table.list td {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    .analytics-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .div1,
+    .div2 {
+        width: 100%;
+        height: 100px;
+    }
+
+    .thankyou {
+        margin-left: 0;
+        font-size: 28px;
+        margin-top: 50px;
+    }
+
+    .sidebar a {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
+
+    .sidebar h2 {
+        font-size: 16px;
+    }
+}
+
+/* Small mobile: Below 480px */
+@media (max-width: 479px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .candidates-container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .candidate-name {
+        font-size: 14px;
+    }
+
+    .candidate-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    table.list {
+        font-size: 10px;
+    }
+
+    table.list th,
+    table.list td {
+        padding: 4px;
+    }
+
+    .div1,
+    .div2 {
+        height: 80px;
+    }
+
+    .div1 h3,
+    .div2 h3 {
+        font-size: 13px;
+    }
+
+    .thankyou {
+        font-size: 24px;
+    }
+
+    .vote-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.candidates-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
+}
+
+.candidate-card {
+    border: 1px solid #000000;
+    padding: 20px;
+    border-radius: 10px;
+    width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffffd2;
+}
+
+.candidate-name {
+    font-size: 50px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color:blue;
+    font-family
+    :'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+

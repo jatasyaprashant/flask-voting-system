@@ -1,0 +1,587 @@
+/* ==================== RESET & GLOBAL STYLES ==================== */
+* {
+    box-sizing: border-box;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Fixed background image */
+.background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 1;
+    z-index: -1;
+}
+
+/* ==================== LAYOUT STRUCTURE ==================== */
+/* Flexbox layout for sidebar + main content */
+body > * {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Main container flex layout */
+body {
+    display: flex;
+}
+
+/* ==================== SIDEBAR STYLES ==================== */
+.sidebar {
+    width: 280px;
+    height: 100vh;
+    background-color: #000000;
+    color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    position: fixed;
+    overflow-y: auto;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.sidebar .image {
+    width: 100px;
+    height: 100px;
+    background-color: white;
+    background-image: url(admin.jpg);
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin: 0 auto 20px;
+    display: block;
+}
+
+.side-h2 {
+    margin: 20px 0;
+    color: #00a6ff;
+    font-size: 20px;
+    text-align: center;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.sidebar li {
+    margin-bottom: 15px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #fff;
+    display: block;
+    padding: 10px 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.sidebar a:hover {
+    background-color: #00a6ff;
+    color: #000;
+}
+
+/* ==================== MAIN CONTENT AREA ==================== */
+/* Main content wrapper - shift right on desktop */
+body::before {
+    content: '';
+    width: 280px;
+    min-height: 100vh;
+}
+
+/* Content sections positioning */
+.add_candidate,
+.list_candidate,
+.list_users,
+.delete-record,
+.analytics,
+.mass_registration {
+    margin-left: 280px;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    max-width: calc(100% - 320px);
+    min-width: 300px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 30px;
+    display: none;
+}
+
+.add_candidate[style*="display: block"],
+.list_candidate[style*="display: block"],
+.list_users[style*="display: block"],
+.delete-record[style*="display: block"],
+.analytics[style*="display: block"],
+.mass_registration[style*="display: block"] {
+    display: block;
+}
+
+/* ==================== FORM STYLES ==================== */
+h1 {
+    color: #007BFF;
+    font-size: 28px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h2 {
+    color: #007BFF;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="file"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="file"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-size: 14px;
+}
+
+/* ==================== BUTTON STYLES ==================== */
+input[type="submit"],
+.delete-btn,
+.delete {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+/* Primary button (Add/Submit) */
+input[type="submit"],
+.delete {
+    background-color: #007BFF;
+    color: white;
+}
+
+input[type="submit"]:hover,
+.delete:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+input[type="submit"]:active,
+.delete:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+/* Danger button (Delete) */
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    font-size: 13px;
+    min-width: 80px;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.delete-btn:active {
+    background-color: #a71d2a;
+    transform: translateY(0);
+}
+
+/* ==================== TABLE STYLES ==================== */
+.list_candidate,
+.list_users {
+    overflow-x: auto;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.list_candidate::-webkit-scrollbar,
+.list_users::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.list_candidate::-webkit-scrollbar-track,
+.list_users::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.list_candidate::-webkit-scrollbar-thumb,
+.list_users::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.list_candidate::-webkit-scrollbar-thumb:hover,
+.list_users::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.dynamic-h2 {
+    color: #007BFF;
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+table.list {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+table.list thead {
+    background-color: #007BFF;
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+table.list th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border: 1px solid #007BFF;
+}
+
+table.list td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+table.list tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table.list tbody tr:hover {
+    background-color: #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+/* ==================== ANALYTICS SECTION ==================== */
+.analytics {
+    min-height: 300px;
+}
+
+.analytics h2 {
+    text-align: center;
+}
+
+.analytics-container {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.div1,
+.div2 {
+    width: 200px;
+    height: 150px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+.div1 {
+    background: linear-gradient(135deg, #ff9a56, #ffa500);
+}
+
+.div2 {
+    background: linear-gradient(135deg, #22ff00, #1abc9c);
+}
+
+.div1:hover,
+.div2:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.div1 h3,
+.div2 h3 {
+    margin: 0;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* ==================== FILE INPUT STYLES ==================== */
+.xcel {
+    width: 100%;
+    padding: 10px;
+    border: 2px dashed #007BFF;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.xcel:hover {
+    background-color: #f0f7ff;
+    border-color: #0056b3;
+}
+
+/* ==================== RESPONSIVE MEDIA QUERIES ==================== */
+
+/* Tablet: 768px to 1023px */
+@media (max-width: 1023px) {
+    .sidebar {
+        width: 250px;
+    }
+
+    .add_candidate,
+    .list_candidate,
+    .list_users,
+    .delete-record,
+    .analytics,
+    .mass_registration {
+        margin-left: 250px;
+        max-width: calc(100% - 290px);
+        padding: 20px;
+    }
+
+    .div1,
+    .div2 {
+        width: 160px;
+        height: 120px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    table.list {
+        font-size: 13px;
+    }
+
+    table.list th,
+    table.list td {
+        padding: 8px;
+    }
+}
+
+/* Mobile: Below 768px */
+@media (max-width: 767px) {
+    body {
+        flex-direction: column;
+    }
+
+    /* Hide sidebar by default on mobile, toggle with JavaScript */
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 250px;
+        height: 100vh;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 2000;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    /* Overlay when sidebar is open */
+    body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0);
+        pointer-events: none;
+        transition: background-color 0.3s ease;
+        z-index: 999;
+    }
+
+    .sidebar.active ~ *::before {
+        background-color: rgba(0, 0, 0, 0.5) !important;
+        pointer-events: all;
+    }
+
+    /* Main content full width on mobile */
+    .add_candidate,
+    .list_candidate,
+    .list_users,
+    .delete-record,
+    .analytics,
+    .mass_registration {
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        max-width: 100%;
+        min-width: auto;
+        padding: 15px;
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    /* Stack table columns on very small screens */
+    table.list {
+        font-size: 12px;
+        width: 100%;
+    }
+
+    table.list th,
+    table.list td {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    /* Responsive button sizing */
+    input[type="submit"],
+    .delete-btn,
+    .delete {
+        width: 100%;
+        min-width: auto;
+        padding: 12px;
+    }
+
+    /* Analytics cards stack vertically */
+    .analytics-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .div1,
+    .div2 {
+        width: 100%;
+        height: 100px;
+    }
+
+    /* Input fields */
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    input[type="file"],
+    textarea,
+    select {
+        font-size: 16px; /* Prevents zoom on focus on iOS */
+    }
+
+    /* Sidebar menu on mobile */
+    .side-h2 {
+        font-size: 18px;
+    }
+
+    .sidebar a {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
+}
+
+/* Small mobile: Below 480px */
+@media (max-width: 479px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    h1 {
+        font-size: 18px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    table.list {
+        font-size: 11px;
+    }
+
+    table.list th,
+    table.list td {
+        padding: 4px;
+        font-size: 11px;
+    }
+
+    .div1,
+    .div2 {
+        height: 80px;
+    }
+
+    .div1 h3,
+    .div2 h3 {
+        font-size: 14px;
+    }
+
+    input[type="submit"],
+    .delete-btn,
+    .delete {
+        padding: 10px;
+        font-size: 12px;
+    }
+}
+
+

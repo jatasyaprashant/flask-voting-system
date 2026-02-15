@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Panel - Online Voting System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='user_panel.css') }}">
+</head>
+
+<body>
+    <div class="background-image"></div>
+    <div class="sidebar">
+        <!-- Sidebar content goes here -->
+        <div class="image">
+            <img src="{{ url_for('static', filename='path_to_image.jpg') }}" class="user-image">
+        </div>
+        <h2>User Panel</h2>
+        <ul>
+            <li><a href="#" id="start">Start Voting</a></li>
+            <li><a href="#" id="Analytics">Analytics</a></li>
+            <li><a href="#" id="result">Results</a></li>
+            <li><a href="{{url_for('logout')}}" id="log-out">Log-out</a></li>
+            <li id="1" style="color: black;"></li>
+        </ul>
+    </div>
+
+    <div class="start-vote" id="start-vote" style="display: none;">
+    </div>
+    <div class="result" id="result1" style="display: none;">
+    </div>
+
+    <div class="analytics" id="analytics-div" style="display: none;">
+        <h2>Analytics</h2>
+        <div class="div1">
+            <h3>Total Voters: <span id="total-voters">Loading...</span></h3>
+        </div>
+        <div class="div2">
+            <h3>Total Candidates: <span id="total-candidates">Loading...</span></h3>
+        </div>
+    </div>
+
+    <script>
+        let flag = 0;
+
+        function disableAllButtons() {
+            const voteButtons = document.querySelectorAll('.vote-btn');
+            voteButtons.forEach(button => {
+                button.disabled = true;
+                button.classList.add('no-hover');
+            });
+        }
+
+        fetch('/send_data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('1').innerHTML = data.vote1;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var start = document.getElementById('start');
+            var startvote = document.getElementById('start-vote');
+            var results = document.getElementById('result1');
+            var result = document.getElementById('result');
+            var analyticsDiv = document.getElementById('analytics-div');
+            var analyticsButton = document.getElementById('Analytics');
+
+            start.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                if (results.style.display != 'none') results.style.display = 'none';
+                if (analyticsDiv.style.display != 'none') analyticsDiv.style.display = 'none';
+
+                if (startvote.style.display === 'none') {
+                    startvote.style.display = 'block';
+                } else {
+                    startvote.style.display = 'none';
+                }
+            });
+
+            result.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                if (startvote.style.display != 'none') startvote.style.display = 'none';
+                if (analyticsDiv.style.display != 'none') analyticsDiv.style.display = 'none';
+
+                if (results.style.display === 'none') {
+                    results.style.display = 'block';
+                    setInterval(resultt, 1000);
+                } else {
+                    results.style.display = 'none';
+                }
+            });
+
+            analyticsButton.addEventListener('click', function (event) {
+                event.preventDefault();
+                console.log("Analytics button clicked!");
+
+                // Hide other sections if they are visible
+                if (startvote.style.display != 'none') {
+                    console.log("Hiding Start Vote Section");
+                    startvote.style.display = 'none';
+                }
+                if (results.style.display != 'none') {
+                    console.log("Hiding Results Section");
+                    results.style.display = 'none';
+                }
+
+                // Toggle the analytics div visibility
+                if (analyticsDiv.style.display === 'none') {
+                    console.log("Showing Analytics Section");
+                    analyticsDiv.style.display = 'block';
+                    updateAnalyticsData();
+                } else {
+                    console.log("Hiding Analytics Section");
+                    analyticsDiv.style.display = 'none';
+                }
+            });
+        });
+
+        function resultt() {
+            fetch('/display_list')
+                .then(response => response.json())
+                .then(data => {
+                    const candidatesListDiv = document.getElementById('result1');
+                    let html = '<table class="list">';
+                    html += '<h2>Candidates List</h2><br><tr><th>ID</th><th>Name</th><th>Age</th><th>Sex</th><th>Area</th><th>Party</th><th>Votes(Encrypted)</th></tr>';
+                    data.forEach(candidate => {
+                        html += `<tr><td>${candidate.id}</td><td>${candidate.name}</td><td>${candidate.age}</td><td>${candidate.sex}</td><td>${candidate.area}</td><td>${candidate.party}</td><td>${candidate.votes}</td></tr>`;
+                    });
+                    html += '</table>';
+                    candidatesListDiv.innerHTML = html;
+                })
+        }
+
+        function updateAnalyticsData() {
+            var totalVotersElement = document.getElementById('total-voters');
+            var totalCandidatesElement = document.getElementById('total-candidates');
+
+            fetch('/total_voters')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Total Voters Data:", data);  // Log the data for debugging
+                    totalVotersElement.textContent = data.total_voters;
+                })
+                .catch(error => {
+                    console.error('Error fetching total voters:', error);
+                });
+
+            fetch('/total_candidates')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Total Candidates Data:", data);  // Log the data for debugging
+                    totalCandidatesElement.textContent = data.total_candidates;
+                })
+                .catch(error => {
+                    console.error('Error fetching total candidates:', error);
+                });
+        }
+
+        fetch('/display_list')
+            .then(response => response.json())
+            .then(data => {
+                const candidatesListDiv = document.getElementById('start-vote');
+                let html = '<div class="candidates-container">';
+                data.forEach(candidate => {
+                    html += `
+                        <div class="candidate-card">
+                            <img src="/uploads/${candidate.candidate_image}" alt="${candidate.name}'s Image" class="candidate-image">
+                            <h1 class="candidate-name">${candidate.name}</h1>
+                            <p><strong>Age:</strong> ${candidate.age}</p>
+                            <p><strong>Sex:</strong> ${candidate.sex}</p>
+                            <p><strong>Area:</strong> ${candidate.area}</p>
+                            <p><strong>Party:</strong> ${candidate.party}</p>
+                            <p><strong>Agenda:</strong> ${candidate.agenda}</p>
+                            <p><strong>Description:</strong> ${candidate.description}</p>
+                            <button class="vote-btn" id="${candidate.id}">Vote</button>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                candidatesListDiv.innerHTML = html;
+                flag = document.getElementById('1').innerHTML;
+                if (flag == 1) {
+                    document.getElementById('start-vote').innerHTML = '<p class="thankyou">Thank you for your valuable vote</p>';
+                }
+
+                if (flag == 1) {
+                    const voteButtons = document.querySelectorAll('.vote-btn');
+                    voteButtons.forEach(button => {
+                        button.disabled = true;
+                        button.classList.add('no-hover');
+                    });
+                }
+
+                candidatesListDiv.addEventListener('click', function (event) {
+                    const clickedButton = event.target;
+                    if (clickedButton.classList.contains('vote-btn')) {
+                        const clickedButtonId = clickedButton.id;
+
+                        fetch('/handle_click', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ buttonId: clickedButtonId })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Response from Flask:', data);
+                                disableAllButtons();
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                disableAllButtons();
+                            });
+                    }
+                });
+
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
+
+</body>
+
+</html>

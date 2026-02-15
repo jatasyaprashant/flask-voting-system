@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard - Online Voting System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_panel.css') }}">
+</head>
+<body>
+    <div class="background-image"></div>
+    <div class="sidebar">
+        <div class="image"></div>
+        <h2 class="side-h2">Admin Panel</h2>
+        <ul>
+            <li><a href="#" id="add">Add Candidates</a></li>
+            <li><a href="#" id="list">List Candidates</a></li>
+            <li><a href="#" id="list-users">Manage Users</a></li>
+            <li><a href="#" id="Analytics">Analytics</a></li>
+            <li><a href="#" id="mass-registration">Mass Registration</a></li>
+            <li><a href="{{url_for('logout')}}" id="log-out">Log-out</a></li>
+        </ul>
+    </div>
+
+    <div class="add_candidate" id="targetDiv" style="display: none;">
+        <h1>Add Candidate</h1>
+        <form action="/add_candidate" method="POST" id="candidateForm" enctype="multipart/form-data">
+            <input type="text" name="candidate_name" placeholder="Candidate Name" required><br><br>
+            <input type="text" name="age" placeholder="Age" required><br><br>
+            <input type="text" name="sex" placeholder="Sex" required><br><br>
+            <input type="text" name="area" placeholder="Area" required><br><br>
+            <input type="text" name="party" placeholder="Party" required><br><br>
+            <textarea type="text" name="agenda" placeholder="Agenda (Max 300 Characters)" maxlength="300" required></textarea><br><br>
+            <textarea type="text" name="description" placeholder="Description (Max 300 Characters)" maxlength="300" required></textarea><br><br>
+            Candidate image:<input type="file" name="candidate_image" accept="image/*"><br><br>
+            <input type="submit" value="Add Candidate">
+        </form>
+    </div>
+
+    <div class="list_candidate" id="targetDiv1" style="display: none;"></div>
+
+    <div class="list_users" id="usersList" style="display: none;"></div>
+
+    <div class="analytics" id="analytics-div" style="display: none;">
+        <h2>Analytics</h2>
+        <div class="div1">
+            <h3>Total Voters: <span id="total-voters">Loading...</span></h3>
+        </div>
+        <div class="div2">
+            <h3>Total Candidates: <span id="total-candidates">Loading...</span></h3>
+        </div>
+    </div>
+
+    <div class="mass_registration" id="massRegDiv" style="display: none;">
+        <h2>Mass Registration</h2>
+        <form action="/mass_register" method="POST" enctype="multipart/form-data">
+            <input type="file" class="xcel" name="file" accept=".csv" required><br><br>
+            <input type="submit" value="Upload and Register">
+        </form>
+    </div>
+
+    <!-- Load external JavaScript for admin panel -->
+    <script src="{{ url_for('static', filename='js/admin_panel.js') }}"></script>
+</body>
+</html>
