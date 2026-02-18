@@ -167,6 +167,12 @@ body::before {
     transform: translateY(0);
 }
 
+.no-hover {
+    /* Make disabled buttons truly non-interactive and visually distinct */
+    pointer-events: none;
+    opacity: 0.65;
+    cursor: not-allowed;
+}
 .no-hover:hover {
     background-color: inherit;
 }

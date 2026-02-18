@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Get sidebar menu buttons
     const addBtn = document.getElementById('add');
     const listBtn = document.getElementById('list');
+    const resultsBtn = document.getElementById('results');
     const listUsersBtn = document.getElementById('list-users');
     const analyticsBtn = document.getElementById('Analytics');
     const massRegBtn = document.getElementById('mass-registration');
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const usersListDiv = document.getElementById('usersList');
     const analyticsDiv = document.getElementById('analytics-div');
     const massRegDiv = document.getElementById('massRegDiv');
+    const resultsDiv = document.getElementById('resultsDiv');
 
     // Helper function to hide all content sections
     function hideAllSections() {
@@ -24,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         usersListDiv.style.display = 'none';
         analyticsDiv.style.display = 'none';
         massRegDiv.style.display = 'none';
+        resultsDiv.style.display = 'none';
     }
 
     // Add Candidate menu click handler
@@ -53,6 +56,21 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Results menu click handler (live updates)
+    if (resultsBtn) {
+        resultsBtn.addEventListener('click', function (event) {
+            event.preventDefault();
+            hideAllSections();
+            if (resultsDiv.style.display === 'none') {
+                resultsDiv.style.display = 'block';
+                startResultsPolling();
+            } else {
+                resultsDiv.style.display = 'none';
+                stopResultsPolling();
+            }
+        });
+    }
+
     // Mass Registration menu click handler
     massRegBtn.addEventListener('click', function (event) {
         event.preventDefault();
@@ -70,6 +88,53 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+// Polling control for live results
+let resultsInterval = null;
+
+function startResultsPolling() {
+    // Immediately update once, then poll every 2 seconds
+    updateResults();
+    if (resultsInterval) clearInterval(resultsInterval);
+    resultsInterval = setInterval(updateResults, 2000);
+}
+
+function stopResultsPolling() {
+    if (resultsInterval) {
+        clearInterval(resultsInterval);
+        resultsInterval = null;
+    }
+}
+
+/**
+ * Fetch results (percentages) and render a table for admin view
+ */
+function updateResults() {
+    fetch('/result')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('resultsContainer');
+            if (!Array.isArray(data) || data.length === 0) {
+                container.innerHTML = '<p>No candidates found.</p>';
+                return;
+            }
+
+            let html = '<table class="list">';
+            html += '<thead><tr><th>ID</th><th>Name</th><th>Party</th><th>Area</th><th>Votes (%)</th></tr></thead><tbody>';
+            data.forEach(c => {
+                // votes already returned as percentage in /result
+                const votes = (typeof c.votes === 'number') ? c.votes.toFixed(2) : c.votes;
+                html += `<tr><td>${c.id}</td><td>${c.name}</td><td>${c.party}</td><td>${c.area}</td><td>${votes}</td></tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        })
+        .catch(err => {
+            console.error('Error fetching results:', err);
+            const container = document.getElementById('resultsContainer');
+            if (container) container.innerHTML = '<p class="error">Error loading results.</p>';
+        });
+}
 
 // ==================== CANDIDATE MANAGEMENT ====================
 

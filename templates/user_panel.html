@@ -182,7 +182,7 @@
                             <p><strong>Party:</strong> ${candidate.party}</p>
                             <p><strong>Agenda:</strong> ${candidate.agenda}</p>
                             <p><strong>Description:</strong> ${candidate.description}</p>
-                            <button class="vote-btn" id="${candidate.id}">Vote</button>
+                            <button type="button" class="vote-btn" id="${candidate.id}">Vote</button>
                         </div>
                     `;
                 });
@@ -201,10 +201,14 @@
                     });
                 }
 
+                // Use event delegation but also defensively disable buttons immediately
                 candidatesListDiv.addEventListener('click', function (event) {
                     const clickedButton = event.target;
                     if (clickedButton.classList.contains('vote-btn')) {
                         const clickedButtonId = clickedButton.id;
+
+                        // Prevent further interaction immediately
+                        disableAllButtons();
 
                         fetch('/handle_click', {
                             method: 'POST',
@@ -216,11 +220,15 @@
                             .then(response => response.json())
                             .then(data => {
                                 console.log('Response from Flask:', data);
-                                disableAllButtons();
+                                // Refresh results view (if visible) so vote counts update
+                                try { resultt(); } catch (e) { /* ignore if result section not shown */ }
+                                // Optionally replace candidate list with a thank you message
+                                document.getElementById('start-vote').innerHTML = '<p class="thankyou">Thank you for your valuable vote</p>';
                             })
                             .catch(error => {
                                 console.error('Error:', error);
-                                disableAllButtons();
+                                // On error we still keep buttons disabled to avoid duplicate votes;
+                                // the page can be reloaded by the user to retry.
                             });
                     }
                 });

@@ -270,13 +270,13 @@ def handle_click():
 
 @app.route("/send_data", methods=['POST'])
 def send_data():
+    # Return whether current user has already voted. Default to 0 if not logged in.
+    data = 0
     if "user_id" in session:
         user_id = session["user_id"]
-        user = db.session.get(User, user_id)  # Corrected this line
-        if user.voted == 1:
+        user = db.session.get(User, user_id)
+        if user and getattr(user, 'voted', 0) == 1:
             data = 1
-        else:
-            data = 0
     response_data = {'vote1': data}
     return jsonify(response_data)
 
